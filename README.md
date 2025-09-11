@@ -1,22 +1,35 @@
-Current tip of the development: [jg/ubuntu-blackrock-v6.10.y](https://github.com/jglathe/linux_ms_dev_kit/tree/jg/ubuntu-blackrock-v6.10.y), now based on [steev/linux](https://github.com/steev/linux/), cross checked against [jhovold/linux](https://github.com/jhovold/linux.git) and [torvalds/linux](https://github.com/torvalds/linux.git)
+# **State of the repository**
 
-# **Recent Changes**
-* Build system has changed to Ubuntu-Mainline, including devkit_defconfig adapted to Ubuntu distro standards. Latest is 6.10.0, working nicely.
-* There is a branch for [el2](https://github.com/jglathe/linux_ms_dev_kit/tree/jg/ubuntu-el2-blackrock-v6.10.y) (providing /dev/kvm suport), running 24/7 on another wdk.
-* There is also a branch for [pop-os](https://github.com/jglathe/linux_ms_dev_kit/tree/jg/pop-blackrock-v6.10.y) using the pop build system. Since 24.04 is still pre-alpha, running when I want to see the state of things 😁 I also have a tree for the [ISO builder](https://github.com/jglathe/pop-os-iso/tree/jg/arm64-x13s), giving a bootable installer ISO for Pop!_OS.
-* flash-kernel is now supported. Windows Dev Kit 2023 is not in the database, the required entries are in the [wdk2023-syshacks](https://github.com/jglathe/wdk2023_syshacks) repository. This works really well IMO, it makes you forget that there is some dtb handling required. It also works in combination with grub and systemd-boot (although systemd-boot might be quite a PITA on the WDK).
-* Wireless (WCN6855) firmware has been [updated](https://github.com/jglathe/wdk2023_syshacks/tree/wlan) to .41, with a new board-2.bin to also include a working calibration set for the WDK. This is newer than what linux-firmware has. I'm trying to get the calibration upstream.
-* QSEECOM is enabled in the kernel, enabling efivars.
+This repository, originally set out to support the Windows Dev Kit 2023, has evolved somewhat. It does support it as best as possible IMO, and then some. It was a long time based on @jhovold's wip tree for x1e80100 with Support for the Lenovo Thinkpad X13s and T14s and followed the kernel development cycles of the upstream kernel (torvalds/linux). I added a selection of my own patches, from other repositories, from the kernel mailing list where I found adding the features/fixes beneficial. There are all upstream device trees for newer qualcomm SoCs, and some that are not yet upstreamed. Support focuses on the devices I have / can test with, naturally (listed in bold). This can be a tricky business.
+Recently the base of the repository has changed to [arm64-laptops managed by Linaro](https://gitlab.com/Linaro/arm64-laptops/linux), also following the upstream cycle.
 
-# **Bootable Image**
-Preinstalled desktop images live [here](https://drive.google.com/drive/folders/1sc_CpqOMTJNljfvRyLG-xdwB0yduje_O?usp=drive_link). The latest is Ubuntu 24.04 with kernel 6.10 for wdk2023. Sometimes images for the Lenovo Thinkpad X13s are available, too. They can be written with the disks utility or Balena Etcher or Rufus (or dd for the adventurous) onto an USB stick or external SSD, and booted. 
+Support is now "as good as I can manage" for following devices:
 
-There are some special properties:
+### *based on SC8280XP*
+- **Microsoft Windows Dev Kit 2023** (device tree is upstreamed)
+- **Lenovo Thinkpad X13s** (minor tweaks to the upstream version)
 
-- The first boot will try to [copy](https://github.com/jglathe/wdk2023_fw_fetch) device-specific firmwares (*8280.mbn) from the Windows installation of the internal nvme if it is accessible. Aferwards, it reboots once.
-- The image comes up with the Ubiquity installer. Should work well enough.
+### *based on X1E80100 (Hamoa) or binnings from it*
+- **HP Omnibook X AI 14-fe0** (device tree is upstreamed)
+- **Lenovo Thinkpad T14s** (minor tweaks from upstream)
+- **Qualcomm Snapdragon Dev Kit for Windows** (derivatives from upstream)
+- Acer Swift sf14-11
+- Lenovo Yoga Slim 7x (minor tweaks from upstream)
+- Asus Vivobook S15
 
-The image is tested for the use case that the local Windows installation is accessible, might balk a lot if this is not the case. For operation reasons I would recommend to keep the installation. It helps with resetting the power management after a failed boot with Linux, and you get the newest firmware when available through Windows Update.
+### *based ox X1P42100 (Purwa) or binnings from it*
+- Acer Swift Go sfg14-01
+- Asus Vivobook S15 (x1p42100 version)
+- HP Omnibook X AI 14-fe1 (x1p42100 version)
+- **Lenovo Ideapad 5 2-in-1 14Q8X9 (83GH)**
+- Lenovo Ideapad Slim 5x 14Q8X9 (83HL)
+- **Lenovo Thinkbook 16 G7 QOY (21NH)** 
+- Microsoft SP12
+
+The config used here is basically the one of Ubuntu Cocept X1E, with only minor additions. 
+
+# **Install media**
+There are a load of dedicated install media for certain devices (and some versions back) which are sort of all outdated now (<= Ubuntu 24.10). Creating them was a lot of manual work, therefore I'm happy that the current Ubuntu Concept 25.04 ISOs can boot all of the X1 devices. But some of the dtbs are missing and need to be added to the ISO before it can boot. That is ongoing work. 
 
 # **Kernel packages**
 Since installing / removing kernels is now only a use of apt and dpkg, pre-built package sets are available [here](https://drive.google.com/drive/folders/1Lps5o3FXroAJFDiKj18vutJbC1uld49s?usp=drive_link). I publish them occasionally, after some testing here.

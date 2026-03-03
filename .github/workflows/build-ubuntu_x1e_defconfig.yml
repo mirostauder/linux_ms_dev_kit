@@ -3,7 +3,9 @@ name: build-ubuntu_x1_defconfig
 on:
   workflow_dispatch:
   push:
+    branches-ignore: [ 'master' ]
   pull_request:
+    branches-ignore: [ 'master' ]
 
 jobs:
   build:

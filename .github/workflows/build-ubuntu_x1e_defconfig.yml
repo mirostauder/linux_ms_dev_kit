@@ -3,7 +3,9 @@ name: build-ubuntu_x1_defconfig
 on:
   workflow_dispatch:
   push:
+    branches-ignore: [ 'master' ]
   pull_request:
+    branches-ignore: [ 'master' ]
 
 jobs:
   build:
@@ -11,11 +13,15 @@ jobs:
     runs-on: ubuntu-24.04-arm
 
     steps:
-    - uses: actions/checkout@v4
+    - name: checkout
+      uses: actions/checkout@v4
 
-    - name: build
+    - name: mrproper
       run: |
         make ARCH=arm64 mrproper
+        
+    - name: configure
+      run: |
         make ARCH=arm64 -j ubuntu_x1e_defconfig
 
         scripts/config --enable CONFIG_BLK_DEV_INITRD=y
@@ -25,6 +31,8 @@ jobs:
         scripts/config --disable SYSTEM_TRUSTED_KEYS
         scripts/config --disable SYSTEM_REVOCATION_KEYS
         
+    - name: build
+      run: |
         VERS=$(make kernelversion)
         HASH=$(git rev-parse HEAD)
         export LOCALVERSION="-jg-g${HASH:0:12}"
@@ -32,3 +40,8 @@ jobs:
         
         make ARCH=arm64 -j$(nproc)
 
+    - name: package
+      run: |
+        make ARCH=arm64 -j$(nproc) bindeb-pkg
+
+        

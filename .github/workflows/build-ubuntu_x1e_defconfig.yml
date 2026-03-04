@@ -15,7 +15,7 @@ jobs:
 
     - name: deps
       run: |
-        apt install -y \
+        sudo apt install -y \
           build-essential \
           debhelper-compat \
           libdw-dev \

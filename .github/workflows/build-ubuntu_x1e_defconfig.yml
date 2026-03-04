@@ -16,6 +16,14 @@ jobs:
     - name: checkout
       uses: actions/checkout@v4
 
+    - name: deps
+      run: |
+        apt install -y \
+          build-essential \
+          debhelper-compat \
+          libdw-dev \
+          libelf-dev
+        
     - name: mrproper
       run: |
         make ARCH=arm64 mrproper

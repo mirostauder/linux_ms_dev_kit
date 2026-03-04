@@ -11,8 +11,16 @@ jobs:
   build:
 
     runs-on: ubuntu-24.04-arm
-
     steps:
+
+    - name: deps
+      run: |
+        apt install -y \
+          build-essential \
+          debhelper-compat \
+          libdw-dev \
+          libelf-dev
+          
     - name: checkout
       uses: actions/checkout@v4
 

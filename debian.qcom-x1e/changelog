@@ -1,3 +1,9 @@
+linux-qcom-x1e (7.1-jg-1) resolute; urgency=medium
+
+  * arm64: dts: qcom: x1-lenovo-ideapad-slim5x-oled: switch to samsung panel driver
+
+ -- Jens Glathe <jens.glathe@oldschoololutions.biz>  Mon, 15 Jun 2026 17:47:15 +0200
+
 linux-qcom-x1e (7.1-jg-0) resolute; urgency=medium
 
   * rebased the whole stack to v7.1

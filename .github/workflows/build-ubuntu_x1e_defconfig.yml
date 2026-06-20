@@ -14,11 +14,11 @@ jobs:
 
     steps:
     - name: checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: deps
       run: |
-        apt install -y \
+        sudo apt install -y \
           build-essential \
           debhelper-compat \
           libdw-dev \
